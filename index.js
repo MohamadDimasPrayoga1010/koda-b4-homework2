@@ -4,11 +4,11 @@ import { checkoutCart } from "./lib/cart.js";
 import { history } from "./lib/history.js";
 
 export async function homeMenu() {
-  console.log("Burger Bangor");
+  console.log("Burger Bangor \n");
   console.log("1. Menu");
   console.log("2. Cart");
   console.log("3. History");
-  console.log("4. Exit");
+  console.log("4. Exit \n");
 
   let input = await question("Pilih :  ");
   input = parseInt(input);
