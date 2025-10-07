@@ -1,36 +1,40 @@
-import { exit, question } from "./lib/question.js";
-import { addMenu } from "./lib/addMenu.js";
-import { checkoutCart } from "./lib/cart.js";
-import { history } from "./lib/history.js";
+import { askUser, closeApp } from "./lib/question.js";
+import { handleAddMenu } from "./lib/addMenu.js";
+import { handlePayment } from "./lib/payment.js";
+import { showOrderHistory } from "./lib/history.js";
 
-export async function homeMenu() {
-  console.log("Burger Bangor \n");
-  console.log("1. Menu");
-  console.log("2. Cart");
-  console.log("3. History");
-  console.log("4. Exit \n");
+export async function showMainMenu() {
+  try {
+    console.log("\n=== BURGER BANGOR ===");
+    console.log("1. Lihat Menu");
+    console.log("2. Keranjang & Bayar");
+    console.log("3. Histori Transaksi");
+    console.log("4. Keluar");
 
-  let input = await question("Pilih :  ");
-  input = parseInt(input);
+    const inputChoice = await askUser("\nPilih menu (angka): ");
+    const choice = parseInt(inputChoice);
 
-  switch (input) {
-    case 1:
-      await addMenu();
-      break;
-    case 2:
-      await checkoutCart();
-      break;
-    case 3:
-      await history();
-      break;
-    case 4:
-      console.log("====== TERIMA KASIH ======");
-      exit();
-      break;
-    default:
-      await question("Salah Input (press enter) ");
-      homeMenu();
+    if (Number.isNaN(choice)) throw new Error("Input harus berupa angka!");
+
+    switch (choice) {
+      case 1:
+        return handleAddMenu();
+      case 2:
+        return handlePayment();
+      case 3:
+        return showOrderHistory();
+      case 4:
+        console.log("\nTerima kasih sudah berbelanja!");
+        closeApp();
+        break;
+      default:
+        throw new Error("Pilihan tidak valid! (1-4)");
+    }
+  } catch (error) {
+    console.log(`${error.message}`);
+    await askUser("\nTekan enter untuk melanjutkan...");
+    return showMainMenu();
   }
 }
 
-homeMenu();
+showMainMenu();
